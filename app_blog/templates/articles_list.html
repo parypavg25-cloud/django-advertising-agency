@@ -1,37 +1,32 @@
-<!DOCTYPE html>
-<html lang="uk">
-<head>
-    <meta charset="UTF-8">
-    <title>Публікації</title>
-</head>
-<body>
-    <nav>
-        <a href="/">Головна</a> |
-        <a href="{% url 'articles-list' %}">Всі публікації</a>
-    </nav>
-    <hr/>
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+{% spaceless %}
 
-    <h2>Публікації {% if category %}— категорія: {{ category }}{% endif %}</h2>
+<ol class="breadcrumb">
+    <li><a href="/">Головна</a></li>
+    <li>Публікації{% if category %} — {{ category }}{% endif %}</li>
+</ol>
 
-    {% for item in items %}
-    <div class="articles-row">
-        <a href="{{ item.get_absolute_url }}">
-            <h4>{{ item.title }}</h4>
-        </a>
-        <h5>
-            {{ item.pub_date|date:"j E Y"|safe|linebreaks }}
-        </h5>
-        <p>
-            {{ item.description|safe|escape|striptags|truncatewords_html:32 }}
-        </p>
-        {% if item.images.all %}
-        <div class="container-image">
-            <img class="img" src="{{ item.images.all.0.image.url }}" alt="" />
-        </div>
-        {% endif %}
-        <div class="clearfix"></div>
+{% for item in items %}
+<div class="articles-row article-block">
+    <a href="{{ item.get_absolute_url }}">
+        <h4>{{ item.title }}</h4>
+    </a>
+    <h5>
+        {{ item.pub_date|date:"j E Y"|safe|linebreaks }}
+    </h5>
+    <p>
+        {{ item.description|safe|escape|striptags|truncatewords_html:32 }}
+    </p>
+    {% if item.images.all %}
+    <div class="container-image">
+        <img class="img" src="{{ item.images.all.0.image.url }}" alt="{{ item.title }}"/>
     </div>
-    <hr/>
-    {% endfor %}
-</body>
-</html>
+    {% endif %}
+    <div class="clearfix"></div>
+</div>
+{% endfor %}
+
+{% endspaceless %}
+{% endblock %}
